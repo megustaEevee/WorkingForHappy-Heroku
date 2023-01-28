@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :today, :find_work, :pay_calc, only: :create
+  before_action :today, :find_work, :find_user, :pay_calc, only: :create
 
   def create
     @comment = Comment.new(comment_params)
@@ -25,6 +25,10 @@ class CommentsController < ApplicationController
 
   def find_work
     @work = Work.find(params[:work_id])
+  end
+
+  def find_user
+    @users = User.all
   end
 
   def pay_calc

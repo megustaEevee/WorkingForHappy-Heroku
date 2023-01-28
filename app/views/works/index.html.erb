@@ -36,6 +36,41 @@
   </div>
 
   <div class="right_bar">
+    <script>
+      if(document.URL.match()){
+        function MessageTimer(){
+          let myTime = new Date();
+          let myHours = myTime.getHours();
+          let myMinutes = myTime.getMinutes();
+          let mySeconds = myTime.getSeconds();
+
+          let strTime = myHours+"時"+myMinutes+"分"+mySeconds+"秒";
+          let d_time = document.getElementById("time");
+          d_time.innerHTML = strTime
+
+          let ontime = myHours;
+
+          let myMessage = document.getElementById("Message");
+
+          let ListMessage = new Array(
+            { time:"8" ,message:"もうすぐ出勤時間です"},
+            { time:"12" ,message:"12時から13時はお昼休みです。60分間休憩しましょう。休憩中の賃金は発生しません。"},
+            { time:"18" ,
+            message:"勤務時間終了です。残業を希望する方は上司に連絡してください。"}
+          );
+
+          for(var i=0; i < ListMessage.length; i++){
+            if( ontime == ListMessage[i]["time"] ){
+            myMessage.innerHTML = ListMessage[i]["message"];
+            setTimeout(function(){myMessage.innerHTML="";}, 60 * 60 * 1000);
+            };
+          };
+          return 0;
+        };
+        setInterval(MessageTimer, 1000);
+      };
+    </script>
+
     <div id="day" class="day">
       <%= "#{@time.year}年#{@time.month}月#{@time.day}日" %>
       <div id="time" class="time">
@@ -43,6 +78,27 @@
     </div>
     <div id="Message" class="Message">
     </div>
+    <% @users.each do |u| %>
+      <div id="worker" class="worker">
+        <%= link_to u.username, user_path(id: u.id) %>
+        <div id="working" class="working">
+          <% @last_day = Work.order(id: :DESC).find_by(user_id: u.id) %>
+          <% if @last_day %>
+            <% if "#{@last_day.created_at.strftime('%Y-%m-%d')}" == "#{Time.zone.today}" %>
+              <%= "#{@last_day.created_at.strftime('%Y/%m/%d　 出勤　%H:%M　')}" %>
+              <% @finish = Wage.find_by(work_id: @last_day.id) %>
+              <% if @finish %>
+                <%= "#{@finish.created_at.strftime('退勤　%H:%M')}" %>
+              <% else %>
+                仕事中
+              <% end %>
+            <% else %>
+              お休み
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
 </div>

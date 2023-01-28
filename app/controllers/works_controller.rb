@@ -1,7 +1,6 @@
 class WorksController < ApplicationController
   before_action :authenticate_user!, except: :index
-  before_action :find_user, only: [:index, :create]
-  before_action :today, only: [:index, :show, :create]
+  before_action :today, :find_user, only: [:index, :show, :create]
   before_action :find_work, :pay_calc, only: :show
 
   def index

@@ -61,7 +61,7 @@
           let myMessage = document.getElementById("Message");
 
           let ListMessage = new Array(
-            { time:"9" ,message:"出勤時間です"},
+            { time:"8" ,message:"もうすぐ出勤時間です"},
             { time:"12" ,message:"12時から13時はお昼休みです。60分間休憩しましょう。休憩中の賃金は発生しません。"},
             { time:"18" ,
             message:"勤務時間終了です。残業を希望する方は上司に連絡してください。"}
@@ -87,6 +87,27 @@
     </div>
     <div id="Message" class="Message">
     </div>
+    <% @users.each do |u| %>
+      <div id="worker" class="worker">
+        <%= link_to u.username, user_path(id: u.id) %>
+        <div id="working" class="working">
+          <% @last_day = Work.order(id: :DESC).find_by(user_id: u.id) %>
+          <% if @last_day %>
+            <% if "#{@last_day.created_at.strftime('%Y-%m-%d')}" == "#{Time.zone.today}" %>
+              <%= "#{@last_day.created_at.strftime('%Y/%m/%d　 出勤　%H:%M　')}" %>
+              <% @finish = Wage.find_by(work_id: @last_day.id) %>
+              <% if @finish %>
+                <%= "#{@finish.created_at.strftime('退勤　%H:%M')}" %>
+              <% else %>
+                仕事中
+              <% end %>
+            <% else %>
+              お休み
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
 
     <% if @comments %>
       <% @comments.each do |c| %>
