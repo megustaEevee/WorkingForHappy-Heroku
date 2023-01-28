@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    @time = Time.now
+    @time = Time.zone.now
 
     @user = User.find(params[:id])
     @work = Work.order(id: :DESC).find_by(user_id: @user.id)

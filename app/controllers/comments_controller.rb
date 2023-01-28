@@ -20,7 +20,7 @@ class CommentsController < ApplicationController
   end
 
   def today
-    @time = Time.now
+    @time = Time.zone.now
   end
 
   def find_work

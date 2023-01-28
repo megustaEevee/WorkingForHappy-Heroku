@@ -45,6 +45,7 @@
 
   <div class="right_bar">
     <script>
+      const  jstNow = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
       if(document.URL.match(/works/)){
         function MessageTimer(){
           let myTime = new Date();
@@ -77,8 +78,6 @@
         };
         setInterval(MessageTimer, 1000);
       };
-      
-      const jstNow = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
     </script>
 
     <H2><%="#{@work.user.username}さん、今日も1日がんばりましょう" %></h2>
